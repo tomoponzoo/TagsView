@@ -43,7 +43,7 @@ extension TableViewCell: TagsViewLayoutDelegate {
     }
     
     func alignmentInTagsView(_ tagsView: TagsView, layout: TagsViewLayout) -> TagsViewAlignment {
-        return .right
+        return .left
     }
     
     func paddingInTagsView(_ tagsView: TagsView, layout: TagsViewLayout) -> UIEdgeInsets {

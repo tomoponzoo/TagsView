@@ -29,7 +29,7 @@ public enum TagsViewRows {
 }
 
 public enum TagsViewAlignment {
-    case left, right
+    case left, right, center
 }
 
 // Layout delegate
@@ -303,22 +303,26 @@ public class TagsViewColumnsLayout {
     }
     
     public func alignedColumns(_ alignment: TagsViewAlignment) -> [CGRect] {
-        guard let tailColumn = columns.last, alignment == .right else { return columns }
+        guard let tailColumn = columns.last, alignment != .left else { return columns }
         
         let offset: CGFloat
+        let div: CGFloat = alignment == .center ? 2.0 : 1.0
         if let supplymentaryColumn = supplymentaryColumn {
-            offset = frame.width - supplymentaryColumn.maxX
+            offset = (frame.width - supplymentaryColumn.maxX) / div
         } else {
-            offset = frame.width - tailColumn.maxX
+            offset = (frame.width - tailColumn.maxX) / div
         }
+        
         return columns.map { CGRect(x: $0.minX + offset, y: $0.minY, width: $0.width, height: $0.height) }
     }
     
     public func alignedSupplymentaryColumn(_ alignment: TagsViewAlignment) -> CGRect? {
-        guard let supplymentaryColumn = supplymentaryColumn, alignment == .right else { return self.supplymentaryColumn }
+        guard let supplymentaryColumn = supplymentaryColumn, alignment != .left else { return self.supplymentaryColumn }
         
+        let div: CGFloat = alignment == .center ? 2.0 : 1.0
+        let offset = (frame.width - supplymentaryColumn.maxX) / div
         return CGRect(
-            x: frame.width - supplymentaryColumn.width,
+            x: supplymentaryColumn.minX + offset,
             y: supplymentaryColumn.minY,
             width: supplymentaryColumn.width,
             height: supplymentaryColumn.height
