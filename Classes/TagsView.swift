@@ -22,11 +22,13 @@ open class TagsView: UIView {
     public weak var dataSource: TagsViewDataSource?
     public weak var delegate: TagsViewDelegate?
     
-    public var layout: TagsViewLayout? {
+    public var layout: TagsViewLayout? = TagsViewLayout() {
         didSet {
             layout?.tagsView = self
         }
     }
+    
+    public var allowsMultipleSelection = false
     
     fileprivate var tagViewNib: UINib?
     fileprivate var supplymentaryTagViewNib: UINib?
@@ -100,39 +102,22 @@ open class TagsView: UIView {
     
     open func reloadData() {
         guard let layout = self.layout else { return }
+        layout.invalidateLayout()
         
-        let numberOfTags = layout.delegate?.numberOfTagsInTagsView(self, layout: layout) ?? 0
-        let tagViews = (0 ..< numberOfTags).flatMap { (index) -> TagView? in
-            return self.dataSource?.tagsView(self, viewForIndexAt: index)
-        }
-        
-        tagViews.filter {
-            $0.superview == nil
-            }.forEach {
-                self.subviews.first?.addSubview($0)
-        }
-        
-        let supplymentaryTagView = dataSource?.supplymentaryTagViewInTagsView(self)
-        if let supplymentaryTagView = supplymentaryTagView, supplymentaryTagView.superview == nil {
-            self.subviews.first?.addSubview(supplymentaryTagView)
-        }
-        
-        invalidateIntrinsicContentSize()
-        setNeedsLayout()
-        layoutIfNeeded()
+        reloadData(layout: layout)
     }
     
-    open func reloadData(withLayoutStore layoutStore: TagsViewLayoutStore? = nil, layoutDelegate: TagsViewLayoutDelegate? = nil) {
-        if let layout = layoutStore?.layout {
-            layout.delegate = layoutDelegate
-            self.layout = layout
-        }
+    open func reloadData(withLayoutStore layoutStore: TagsViewLayoutStore?, layoutDelegate: TagsViewLayoutDelegate?) {
+        guard let layout = layoutStore?.layout else { return }
+        layout.delegate = layoutDelegate
         
-        reloadData()
+        reloadData(layout: layout)
     }
     
     open func selectTag(at index: Int) {
-        tagView(at: index)?.isSelected = true
+        if let tagView = tagView(at: index) {
+            selectTag(tagView: tagView)
+        }
     }
     
     open func deselectTag(at index: Int) {
@@ -159,6 +144,30 @@ extension TagsView {
         containerView = view
     }
     
+    fileprivate func reloadData(layout: TagsViewLayout) {
+        let numberOfTags = layout.delegate?.numberOfTagsInTagsView(self, layout: layout) ?? 0
+        let tagViews = (0 ..< numberOfTags).flatMap { (index) -> TagView? in
+            return self.dataSource?.tagsView(self, viewForIndexAt: index)
+        }
+        
+        tagViews.filter {
+            $0.superview == nil
+        }.forEach {
+            self.subviews.first?.addSubview($0)
+        }
+        
+        let supplymentaryTagView = dataSource?.supplymentaryTagViewInTagsView(self)
+        if let supplymentaryTagView = supplymentaryTagView, supplymentaryTagView.superview == nil {
+            self.subviews.first?.addSubview(supplymentaryTagView)
+        }
+        
+        self.layout = layout
+        
+        invalidateIntrinsicContentSize()
+        setNeedsLayout()
+        layoutIfNeeded()
+    }
+    
     fileprivate func newTagView() -> TagView {
         let tagView = tagViewNib?.instantiate(withOwner: nil, options: nil).first as? TagView ?? TagView()
         tagView.translatesAutoresizingMaskIntoConstraints = true
@@ -171,6 +180,19 @@ extension TagsView {
         supplymentaryTagView.translatesAutoresizingMaskIntoConstraints = true
         
         return supplymentaryTagView
+    }
+    
+    fileprivate func selectTag(tagView: TagView) {
+        if allowsMultipleSelection {
+            tagView.isSelected = !tagView.isSelected
+        } else {
+            if !tagView.isSelected {
+                if let selectedTagView = tagViews.filter({ $0.isSelected }).first {
+                    selectedTagView.isSelected = false
+                }
+            }
+            tagView.isSelected = true
+        }
     }
 }
 
@@ -195,12 +217,12 @@ extension TagsView {
             
             view.isHighlighted = false
             if view.bounds.contains(point) {
-                view.isSelected = !view.isSelected
-                
                 if let tagView = view as? TagView, let index = index(for: tagView) {
+                    selectTag(tagView: tagView)
                     delegate?.tagsView(self, didSelectItemAt: index)
                 }
                 if let _ = view as? SupplymentaryTagView {
+                    view.isSelected = !view.isSelected
                     delegate?.didSelectSupplymentaryItem(self)
                 }
             }
