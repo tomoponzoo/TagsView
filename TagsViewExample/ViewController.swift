@@ -16,7 +16,8 @@ class ViewModel: TagsViewLayoutStore {
     var rows: TagsViewRows = .rows(1)
     
     init() {
-        self.strings = (0 ..< arc4random_uniform(20) + 1).map { _ in "タグ\(arc4random_uniform(10000000))" }
+        let endIndex = arc4random_uniform(20) + 1
+        self.strings = (0 ..< endIndex).map { _ in "タグ\(arc4random_uniform(10000000))" }
         self.layout = TagsViewLayout()
     }
 }

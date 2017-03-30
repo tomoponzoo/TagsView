@@ -31,8 +31,6 @@ open class TagsView: UIView {
     fileprivate var tagViewNib: UINib?
     fileprivate var supplymentaryTagViewNib: UINib?
 
-    fileprivate var layoutStore: TagsViewLayoutStore?
-    
     fileprivate var containerView: UIView!
 
     fileprivate var tagViews: [TagView] {
@@ -100,9 +98,8 @@ open class TagsView: UIView {
         self.supplymentaryTagViewNib = nib
     }
     
-    open func reloadData(withLayoutStore layoutStore: TagsViewLayoutStore? = nil, layoutDelegate: TagsViewLayoutDelegate? = nil) {
-        guard let layout = layoutStore?.layout else { return }
-        layout.delegate = layoutDelegate
+    open func reloadData() {
+        guard let layout = self.layout else { return }
         
         let numberOfTags = layout.delegate?.numberOfTagsInTagsView(self, layout: layout) ?? 0
         let tagViews = (0 ..< numberOfTags).flatMap { (index) -> TagView? in
@@ -111,8 +108,8 @@ open class TagsView: UIView {
         
         tagViews.filter {
             $0.superview == nil
-        }.forEach {
-            self.subviews.first?.addSubview($0)
+            }.forEach {
+                self.subviews.first?.addSubview($0)
         }
         
         let supplymentaryTagView = dataSource?.supplymentaryTagViewInTagsView(self)
@@ -120,11 +117,18 @@ open class TagsView: UIView {
             self.subviews.first?.addSubview(supplymentaryTagView)
         }
         
-        self.layout = layout
-        
         invalidateIntrinsicContentSize()
         setNeedsLayout()
         layoutIfNeeded()
+    }
+    
+    open func reloadData(withLayoutStore layoutStore: TagsViewLayoutStore? = nil, layoutDelegate: TagsViewLayoutDelegate? = nil) {
+        if let layout = layoutStore?.layout {
+            layout.delegate = layoutDelegate
+            self.layout = layout
+        }
+        
+        reloadData()
     }
     
     open func selectTag(at index: Int) {
