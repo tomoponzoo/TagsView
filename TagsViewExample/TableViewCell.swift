@@ -21,6 +21,7 @@ class TableViewCell: UITableViewCell {
             tagsView.registerSupplymentaryTagView(nib: UINib(nibName: "SupplymentaryTagViewEx", bundle: nil))
             tagsView.dataSource = self
             tagsView.delegate = self
+            tagsView.allowsMultipleSelection = true
         }
     }
     
