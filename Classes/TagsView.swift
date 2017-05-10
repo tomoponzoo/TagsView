@@ -182,9 +182,13 @@ extension TagsView {
         return supplymentaryTagView
     }
     
-    fileprivate func selectTag(tagView: TagView) {
+    fileprivate func selectTag(tagView: TagView, isEvent: Bool = false) {
         if allowsMultipleSelection {
-            tagView.isSelected = !tagView.isSelected
+            if isEvent {
+                tagView.isSelected = !tagView.isSelected
+            } else {
+                tagView.isSelected = true
+            }
         } else {
             if !tagView.isSelected {
                 if let selectedTagView = tagViews.filter({ $0.isSelected }).first {
@@ -218,7 +222,7 @@ extension TagsView {
             view.isHighlighted = false
             if view.bounds.contains(point) {
                 if let tagView = view as? TagView, let index = index(for: tagView) {
-                    selectTag(tagView: tagView)
+                    selectTag(tagView: tagView, isEvent: true)
                     delegate?.tagsView(self, didSelectItemAt: index)
                 }
                 if let _ = view as? SupplymentaryTagView {
