@@ -30,32 +30,32 @@ class TableViewCell: UITableViewCell {
     
     func updateCell(viewModel: ViewModel) {
         self.viewModel = viewModel
-        tagsView.reloadData(withLayoutStore: viewModel, layoutDelegate: self)
+        tagsView.reloadData(identifier: viewModel.identifier)
     }
 }
 
-extension TableViewCell: TagsViewLayoutDelegate {
-    func numberOfRowsInTagsView(_ tagsView: TagsView, layout: TagsViewLayout) -> TagsViewRows {
+extension TableViewCell: TagsViewDataSource {
+    func numberOfRows(in tagsView: TagsView) -> Rows {
         return viewModel?.rows ?? .infinite
     }
     
-    func numberOfTagsInTagsView(_ tagsView: TagsView, layout: TagsViewLayout) -> Int {
+    func numberOfTags(in tagsView: TagsView) -> Int {
         return viewModel?.strings.count ?? 0
     }
     
-    func alignmentInTagsView(_ tagsView: TagsView, layout: TagsViewLayout) -> TagsViewAlignment {
+    func alignment(in tagsView: TagsView) -> Alignment {
         return .left
     }
     
-    func paddingInTagsView(_ tagsView: TagsView, layout: TagsViewLayout) -> UIEdgeInsets {
+    func padding(in tagsView: TagsView) -> UIEdgeInsets {
         return UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
     }
     
-    func spacerInTagsView(_ tagsView: TagsView, layout: TagsViewLayout) -> TagsViewSpacer {
-        return TagsViewSpacer(vertical: 4, horizontal: 4)
+    func spacer(in tagsView: TagsView) -> Spacer {
+        return Spacer(vertical: 4, horizontal: 4)
     }
     
-    func isVisibleSupplymentaryTagViewInTagsView(_ tagsView: TagsView, layout: TagsViewLayout, rows: TagsViewRows, row: Int, hasNextRow: Bool) -> Bool {
+    func isVisibleSupplymentaryTagView(in tagsView: TagsView, rows: Rows, row: Int, hasNextRow: Bool) -> Bool {
         switch rows {
         case .infinite:
             return row > 0
@@ -64,9 +64,7 @@ extension TableViewCell: TagsViewLayoutDelegate {
             return hasNextRow
         }
     }
-}
-
-extension TableViewCell: TagsViewDataSource {
+   
     func tagsView(_ tagsView: TagsView, viewForIndexAt index: Int) -> TagView? {
         let tagView = tagsView.dequeueReusableTagView(for: index) as? TagViewEx
         tagView?.string = viewModel!.strings[index]
@@ -74,7 +72,7 @@ extension TableViewCell: TagsViewDataSource {
         return tagView ?? TagViewEx()
     }
     
-    func supplymentaryTagViewInTagsView(_ tagsView: TagsView) -> SupplymentaryTagView? {
+    func supplymentaryTagView(in tagsView: TagsView) -> SupplymentaryTagView? {
         let supplymentaryTagView = tagsView.dequeueReusableSupplymentaryTagView() as? SupplymentaryTagViewEx
         return supplymentaryTagView
     }

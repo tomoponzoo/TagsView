@@ -9,16 +9,22 @@
 import UIKit
 import TagsView
 
-class ViewModel: TagsViewLayoutStore {
+class ViewModel {
     let strings: [String]
     
-    var layout: TagsViewLayout?
-    var rows: TagsViewRows = .rows(1)
+    var rows: Rows = .rows(1)
+    
+    var identifier: String {
+        if case let .rows(_) = rows {
+            return "\(strings.first ?? ""):CLS"
+        } else {
+            return "\(strings.first ?? ""):OPN"
+        }
+    }
     
     init() {
         let endIndex = arc4random_uniform(20) + 1
         self.strings = (0 ..< endIndex).map { _ in "タグ\(arc4random_uniform(10000000))" }
-        self.layout = TagsViewLayout()
     }
 }
 
@@ -49,7 +55,7 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModels.count
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -74,7 +80,6 @@ extension ViewController: TableViewCellDelegate {
             viewModels[indexPath.row].rows = .infinite
         }
         
-        viewModels[indexPath.row].layout?.invalidateLayout()
         tableView.reloadRows(at: [indexPath], with: .none)
     }
 }

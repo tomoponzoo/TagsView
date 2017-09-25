@@ -8,42 +8,54 @@
 
 import UIKit
 
-public protocol TagsViewDataSource: class {
-    func tagsView(_ tagsView: TagsView, viewForIndexAt index: Int) -> TagView?
-    func supplymentaryTagViewInTagsView(_ tagsView: TagsView) -> SupplymentaryTagView?
-}
-
-public protocol TagsViewDelegate: class {
-    func tagsView(_ tagsView: TagsView, didSelectItemAt index: Int)
-    func didSelectSupplymentaryItem(_ tagsView: TagsView)
-}
-
 open class TagsView: UIView {
     public weak var dataSource: TagsViewDataSource?
     public weak var delegate: TagsViewDelegate?
     
-    public var layout: TagsViewLayout? = TagsViewLayout() {
-        didSet {
-            layout?.tagsView = self
-        }
-    }
-    
     public var allowsMultipleSelection = false
     
-    fileprivate var tagViewNib: UINib?
-    fileprivate var supplymentaryTagViewNib: UINib?
-
-    fileprivate var containerView: UIView!
-
-    fileprivate var tagViews: [TagView] {
+    public var numberOfTags: Int {
+        return layoutProperties.numberOfTags
+    }
+    
+    public var numberOfRows: Rows {
+        return layoutProperties.numberOfRows
+    }
+    
+    public var alignment: Alignment {
+        return layoutProperties.alignment
+    }
+    
+    public var padding: UIEdgeInsets {
+        return layoutProperties.padding
+    }
+    
+    public var spacer: Spacer {
+        return layoutProperties.spacer
+    }
+    
+    var layoutProperties = LayoutProperties()
+    var layoutIdentifier: String?
+    
+    var tagViewNib: UINib?
+    var supplymentaryTagViewNib: UINib?
+    
+    var containerView: UIView!
+    var containerViewTopConstraint: NSLayoutConstraint!
+    var containerViewLeftConstraint: NSLayoutConstraint!
+    var containerViewRightConstraint: NSLayoutConstraint!
+    var containerViewBottomConstraint: NSLayoutConstraint!
+    
+    var measureView: MeasureView!
+    var preferredMaxLayoutWidth: CGFloat = 0
+    
+    var tagViews: [TagView] {
         return containerView.subviews.flatMap { $0 as? TagView }
     }
     
-    fileprivate var supplymentaryTagView: SupplymentaryTagView? {
+    var supplymentaryTagView: SupplymentaryTagView? {
         return containerView.subviews.flatMap { $0 as? SupplymentaryTagView }.first
     }
-    
-    fileprivate var indexPath: IndexPath?
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -55,43 +67,6 @@ open class TagsView: UIView {
         setupView()
     }
     
-    open override var intrinsicContentSize: CGSize {
-        if let cachedSize = layout?.tagsViewSize {
-            return cachedSize
-        }
-        
-        let size = layout?.calculate(width: bounds.width) ?? .zero
-        return size
-    }
-    
-    open override func layoutSubviews() {
-        guard let padding = self.layout?.padding, let layout = self.layout?.layout else { return }
-        
-        containerView.frame = CGRect(
-            x: padding.left,
-            y: padding.top,
-            width: layout.size.width,
-            height: layout.size.height
-        )
-        
-        let tagViews = self.tagViews
-        tagViews.forEach { (tagView) in
-            tagView.isHidden = true
-        }
-        
-        zip(tagViews, layout.columns).forEach { (tagView, frame) in
-            tagView.frame = frame
-            tagView.isHidden = false
-        }
-        
-        if let frame = layout.supplymentaryColumn {
-            supplymentaryTagView?.frame = frame
-            supplymentaryTagView?.isHidden = false
-        } else {
-            supplymentaryTagView?.isHidden = true
-        }
-    }
-    
     public func registerTagView(nib: UINib?) {
         self.tagViewNib = nib
     }
@@ -100,53 +75,15 @@ open class TagsView: UIView {
         self.supplymentaryTagViewNib = nib
     }
     
-    open func reloadData() {
-        guard let layout = self.layout else { return }
-        layout.invalidateLayout()
+    public func reloadData() {
+        reloadData(identifier: nil)
+    }
+    
+    public func reloadData(identifier: String? = nil) {
+        layoutProperties = resetLayoutProperties()
+        layoutIdentifier = identifier
         
-        reloadData(layout: layout)
-    }
-    
-    open func reloadData(withLayoutStore layoutStore: TagsViewLayoutStore?, layoutDelegate: TagsViewLayoutDelegate?) {
-        guard let layout = layoutStore?.layout else { return }
-        layout.delegate = layoutDelegate
-        
-        reloadData(layout: layout)
-    }
-    
-    open func selectTag(at index: Int) {
-        if let tagView = tagView(at: index) {
-            selectTag(tagView: tagView)
-        }
-    }
-    
-    open func deselectTag(at index: Int) {
-        tagView(at: index)?.isSelected = false
-    }
-    
-    open func index(for view: TagView) -> Int? {
-        return containerView.subviews.index(of: view)
-    }
-    
-    open func tagView(at index: Int) -> TagView? {
-        return index < tagViews.count ? tagViews[index] : nil
-    }
-}
-
-// MARK: Private
-extension TagsView {
-    
-    fileprivate func setupView() {
-        let view = UIView(frame: bounds)
-        view.translatesAutoresizingMaskIntoConstraints = true
-        addSubview(view)
-        
-        containerView = view
-    }
-    
-    fileprivate func reloadData(layout: TagsViewLayout) {
-        let numberOfTags = layout.delegate?.numberOfTagsInTagsView(self, layout: layout) ?? 0
-        let tagViews = (0 ..< numberOfTags).flatMap { (index) -> TagView? in
+        let tagViews = (0..<numberOfTags).flatMap { (index) -> TagView? in
             return self.dataSource?.tagsView(self, viewForIndexAt: index)
         }
         
@@ -156,33 +93,75 @@ extension TagsView {
             self.subviews.first?.addSubview($0)
         }
         
-        let supplymentaryTagView = dataSource?.supplymentaryTagViewInTagsView(self)
+        
+        let supplymentaryTagView = dataSource?.supplymentaryTagView(in: self)
         if let supplymentaryTagView = supplymentaryTagView, supplymentaryTagView.superview == nil {
             self.subviews.first?.addSubview(supplymentaryTagView)
         }
         
-        self.layout = layout
-        
-        invalidateIntrinsicContentSize()
         setNeedsLayout()
-        layoutIfNeeded()
     }
     
-    fileprivate func newTagView() -> TagView {
+    public func selectTag(at index: Int) {
+        if let tagView = tagView(at: index) {
+            selectTag(tagView: tagView)
+        }
+    }
+    
+    public func deselectTag(at index: Int) {
+        tagView(at: index)?.isSelected = false
+    }
+    
+    public func index(for view: TagView) -> Int? {
+        return containerView.subviews.index(of: view)
+    }
+    
+    public func tagView(at index: Int) -> TagView? {
+        return index < tagViews.count ? tagViews[index] : nil
+    }
+}
+
+// MARK: - Private
+extension TagsView {
+    
+    func setupView() {
+        let view = UIView(frame: .zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(view)
+        
+        containerViewTopConstraint = view.topAnchor.constraint(equalTo: topAnchor, constant: 0)
+        containerViewTopConstraint.isActive = true
+        
+        containerViewLeftConstraint = view.leftAnchor.constraint(equalTo: leftAnchor, constant: 0)
+        containerViewLeftConstraint.isActive = true
+        
+        containerViewRightConstraint = view.rightAnchor.constraint(equalTo: rightAnchor, constant: 0)
+        containerViewRightConstraint.isActive = true
+        
+        containerViewBottomConstraint = view.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0)
+        containerViewBottomConstraint.isActive = true
+        
+        containerView = view
+        
+        measureView = MeasureView(frame: .zero)
+        measureView.attach(view: containerView)
+    }
+    
+    func newTagView() -> TagView {
         let tagView = tagViewNib?.instantiate(withOwner: nil, options: nil).first as? TagView ?? TagView()
         tagView.translatesAutoresizingMaskIntoConstraints = true
         
         return tagView
     }
     
-    fileprivate func newSupplymentaryTagView() -> SupplymentaryTagView? {
+    func newSupplymentaryTagView() -> SupplymentaryTagView? {
         guard let supplymentaryTagView = supplymentaryTagViewNib?.instantiate(withOwner: nil, options: nil).first as? SupplymentaryTagView else { return nil }
         supplymentaryTagView.translatesAutoresizingMaskIntoConstraints = true
         
         return supplymentaryTagView
     }
     
-    fileprivate func selectTag(tagView: TagView, isEvent: Bool = false) {
+    func selectTag(tagView: TagView, isEvent: Bool = false) {
         if allowsMultipleSelection {
             if isEvent {
                 tagView.isSelected = !tagView.isSelected
@@ -200,7 +179,7 @@ extension TagsView {
     }
 }
 
-// MARK: Event handle
+// MARK: - Event handle
 extension TagsView {
     open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let view = touches.first?.view as? BaseTagView {
@@ -240,7 +219,7 @@ extension TagsView {
     }
 }
 
-// MARK: Recycle views
+// MARK: - Recycle views
 extension TagsView {
     open func dequeueReusableTagView(for index: Int) -> TagView {
         if let tagView = tagView(at: index) {
