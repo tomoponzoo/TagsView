@@ -11,47 +11,66 @@ import UIKit
 extension TagsView {
     
     open override func updateConstraints() {
-        containerViewTopConstraint.constant = layoutProperties.padding.top
-        containerViewLeftConstraint.constant = layoutProperties.padding.left
-        containerViewRightConstraint.constant = layoutProperties.padding.right
-        containerViewBottomConstraint.constant = layoutProperties.padding.bottom
+        let engine = LayoutEngine(tagsView: self, preferredMaxLayoutWidth: preferredMaxLayoutWidth)
+        let layout = engine.layout(identifier: layoutIdentifier, partition: layoutPartition)
         
+        removeConstraints(constraints)
+        
+        widthAnchor.constraint(equalToConstant: layout.size.width).isActive = true
+        
+        let heightConstraint = heightAnchor.constraint(equalToConstant: layout.size.height)
+        heightConstraint.priority = .fittingSizeLevel
+        heightConstraint.isActive = true
+        
+        tagViews.forEach { (tagView) in
+            tagView.constraints.filter { (constraint) -> Bool in
+                if let firstItem = constraint.firstItem as? UIView, firstItem == tagView, constraint.secondItem == nil {
+                    return true
+                } else {
+                    return false
+                }
+            }.forEach { (constraint) in
+                tagView.removeConstraint(constraint)
+            }
+            tagView.isHidden = true
+        }
+        
+        zip(tagViews, layout.columns).forEach { (tagView, column) in
+            tagView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: column.minX).isActive = true
+            tagView.topAnchor.constraint(equalTo: self.topAnchor, constant: column.minY).isActive = true
+            tagView.widthAnchor.constraint(equalToConstant: column.width).isActive = true
+            tagView.heightAnchor.constraint(equalToConstant: column.height).isActive = true
+            tagView.isHidden = false
+        }
+
+        if let supplymentaryTagView = supplymentaryTagView {
+            supplymentaryTagView.constraints.filter { (constraint) -> Bool in
+                if let firstItem = constraint.firstItem as? UIView, firstItem == supplymentaryTagView, constraint.secondItem == nil {
+                    return true
+                } else {
+                    return false
+                }
+            }.forEach { (constraint) in
+                supplymentaryTagView.removeConstraint(constraint)
+            }
+            supplymentaryTagView.isHidden = true
+        }
+        
+        if let supplymentaryTagView = supplymentaryTagView, let column = layout.supplymentaryColumn {
+            supplymentaryTagView.leftAnchor.constraint(equalTo: leftAnchor, constant: column.minX).isActive = true
+            supplymentaryTagView.topAnchor.constraint(equalTo: topAnchor, constant: column.minY).isActive = true
+            supplymentaryTagView.widthAnchor.constraint(equalToConstant: column.width).isActive = true
+            supplymentaryTagView.heightAnchor.constraint(equalToConstant: column.height).isActive = true
+            supplymentaryTagView.isHidden = false
+        }
+
         super.updateConstraints()
     }
     
     open override var intrinsicContentSize: CGSize {
-        let preferredMaxLayoutWidth = measureView.preferredMaxLayoutWidth
-        guard preferredMaxLayoutWidth > 0 else {
-            return super.intrinsicContentSize
-        }
-        
-        self.preferredMaxLayoutWidth = preferredMaxLayoutWidth
-        
-        let engine = LayoutEngine(tagsView: self, preferredMaxWidth: measureView.preferredMaxLayoutWidth)
-        let layout = engine.layout(identifier: layoutIdentifier)
+        let engine = LayoutEngine(tagsView: self, preferredMaxLayoutWidth: preferredMaxLayoutWidth)
+        let layout = engine.layout(identifier: layoutIdentifier, partition: layoutPartition)
         return layout.size
-    }
-    
-    open override func layoutSubviews() {
-        let engine = LayoutEngine(tagsView: self, preferredMaxWidth: measureView.preferredMaxLayoutWidth)
-        let layout = engine.layout(identifier: layoutIdentifier)
-        
-        let tagViews = self.tagViews
-        tagViews.forEach { (tagView) in
-            tagView.isHidden = true
-        }
-        
-        zip(tagViews, layout.columns).forEach { (tagView, frame) in
-            tagView.frame = frame
-            tagView.isHidden = false
-        }
-        
-        if let frame = layout.supplymentaryColumn {
-            supplymentaryTagView?.frame = frame
-            supplymentaryTagView?.isHidden = false
-        } else {
-            supplymentaryTagView?.isHidden = true
-        }
     }
     
     func resetLayoutProperties() -> LayoutProperties {

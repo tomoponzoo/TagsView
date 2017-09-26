@@ -10,39 +10,46 @@ import Foundation
 
 class LayoutEngine {
     let tagsView: TagsView
-    let preferredMaxWidth: CGFloat
+    let preferredMaxLayoutWidth: CGFloat
     
-    init(tagsView: TagsView, preferredMaxWidth: CGFloat) {
+    init(tagsView: TagsView, preferredMaxLayoutWidth: CGFloat) {
         self.tagsView = tagsView
-        self.preferredMaxWidth = preferredMaxWidth
+        self.preferredMaxLayoutWidth = preferredMaxLayoutWidth
     }
     
-    func layout(identifier: String? = nil) -> Layout {
-        if let layout = identifier.flatMap({ LayoutCache.shared.getLayout(identifier: $0) }) {
+    func layout(identifier: String? = nil, partition: String? = "defaults") -> Layout {
+        if
+            let identifier = identifier,
+            let partition = partition,
+            let layout = LayoutCache.shared.getLayout(identifier: makeIdentifier(identifier, partition: partition)) {
             return layout
         }
         
-        let rowsLayout = RowsLayout(tagsView: tagsView, preferredMaxWidth: preferredMaxWidth)
+        let rowsLayout = RowsLayout(tagsView: tagsView, preferredMaxLayoutWidth: preferredMaxLayoutWidth)
         rowsLayout.layout()
         
         let layout = Layout(layout: rowsLayout)
-        if let identifier = identifier {
-            LayoutCache.shared.setLayout(layout, identifier: identifier)
+        if let identifier = identifier, let partition = partition, preferredMaxLayoutWidth > 0 {
+            LayoutCache.shared.setLayout(layout, identifier: makeIdentifier(identifier, partition: partition))
         }
         
         return layout
+    }
+    
+    func makeIdentifier(_ identifier: String, partition: String) -> String {
+        return "\(partition)#\(identifier)"
     }
 }
 
 class RowsLayout {
     let tagsView: TagsView
-    let preferredMaxWidth: CGFloat
+    let preferredMaxLayoutWidth: CGFloat
     
     var layouts = [ColumnsLayout]()
     
     var size: CGSize {
         guard let layout = layouts.last else { return .zero }
-        return CGSize(width: layout.frame.width, height: layout.frame.maxY)
+        return CGSize(width: layout.frame.width + tagsView.padding.left + tagsView.padding.right, height: layout.frame.maxY + tagsView.padding.bottom)
     }
     
     var columns: [CGRect] {
@@ -61,9 +68,9 @@ class RowsLayout {
         }
     }
     
-    init(tagsView: TagsView, preferredMaxWidth: CGFloat) {
+    init(tagsView: TagsView, preferredMaxLayoutWidth: CGFloat) {
         self.tagsView = tagsView
-        self.preferredMaxWidth = preferredMaxWidth
+        self.preferredMaxLayoutWidth = preferredMaxLayoutWidth - tagsView.padding.left - tagsView.padding.right
     }
     
     func layout() {
@@ -76,7 +83,7 @@ class RowsLayout {
         let supplymentaryTagViewSize = supplymentaryTagView?.intrinsicContentSize
         
         let h = tagViewSizes.reduce(supplymentaryTagViewSize?.height ?? 0) { max($0, $1.height) }
-        let frame = CGRect(x: 0, y: 0, width: preferredMaxWidth, height: h)
+        let frame = CGRect(x: tagsView.padding.left, y: tagsView.padding.top, width: preferredMaxLayoutWidth, height: h)
         let layout = ColumnsLayout(tagsView: tagsView, frame: frame, index: 0)
         
         _ = tagViewSizes.reduce(layout) { (layout, size) -> ColumnsLayout in

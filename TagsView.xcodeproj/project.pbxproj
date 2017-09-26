@@ -30,7 +30,6 @@
 		0CA66A591F78C47B00CD4956 /* Alignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA66A581F78C47B00CD4956 /* Alignment.swift */; };
 		0CA66A5B1F78CEA400CD4956 /* TagsView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA66A5A1F78CEA400CD4956 /* TagsView+Layout.swift */; };
 		0CA66A5D1F78D62300CD4956 /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA66A5C1F78D62300CD4956 /* Layout.swift */; };
-		0CA66A5F1F78D88E00CD4956 /* MeasureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA66A5E1F78D88E00CD4956 /* MeasureView.swift */; };
 		558BA0DB1E6DBB0F0015E459 /* SupplymentaryTagViewEx.xib in Resources */ = {isa = PBXBuildFile; fileRef = 558BA0DA1E6DBB0F0015E459 /* SupplymentaryTagViewEx.xib */; };
 /* End PBXBuildFile section */
 
@@ -83,7 +82,6 @@
 		0CA66A581F78C47B00CD4956 /* Alignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alignment.swift; sourceTree = "<group>"; };
 		0CA66A5A1F78CEA400CD4956 /* TagsView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TagsView+Layout.swift"; sourceTree = "<group>"; };
 		0CA66A5C1F78D62300CD4956 /* Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
-		0CA66A5E1F78D88E00CD4956 /* MeasureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasureView.swift; sourceTree = "<group>"; };
 		558BA0DA1E6DBB0F0015E459 /* SupplymentaryTagViewEx.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SupplymentaryTagViewEx.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -166,7 +164,6 @@
 				0CA66A5C1F78D62300CD4956 /* Layout.swift */,
 				0CA66A4A1F78B64A00CD4956 /* LayoutEngine.swift */,
 				0CA66A521F78C35E00CD4956 /* LayoutCache.swift */,
-				0CA66A5E1F78D88E00CD4956 /* MeasureView.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -298,7 +295,6 @@
 				0CA66A531F78C35E00CD4956 /* LayoutCache.swift in Sources */,
 				0CA66A591F78C47B00CD4956 /* Alignment.swift in Sources */,
 				0CA66A551F78C3A700CD4956 /* Spacer.swift in Sources */,
-				0CA66A5F1F78D88E00CD4956 /* MeasureView.swift in Sources */,
 				0C7B214A1E6D60DA004C0FDA /* TagView.swift in Sources */,
 				0CA66A571F78C44200CD4956 /* Rows.swift in Sources */,
 				0CA66A4B1F78B64A00CD4956 /* LayoutEngine.swift in Sources */,

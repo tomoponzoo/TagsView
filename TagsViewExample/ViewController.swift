@@ -13,12 +13,13 @@ class ViewModel {
     let strings: [String]
     
     var rows: Rows = .rows(1)
-    
+
     var identifier: String {
-        if case let .rows(_) = rows {
-            return "\(strings.first ?? ""):CLS"
-        } else {
+        switch rows {
+        case .infinite:
             return "\(strings.first ?? ""):OPN"
+        default:
+            return "\(strings.first ?? ""):CLS"
         }
     }
     
@@ -36,7 +37,7 @@ class ViewController: UIViewController {
         }
     }
 
-    fileprivate let viewModels = [ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel()]
+    fileprivate let viewModels = [ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel()]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,12 +56,13 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return viewModels.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell") as! TableViewCell
         cell.delegate = self
+//        cell.tagsView.preferredMaxLayoutWidth = tableView.bounds.width - 16
         cell.updateCell(viewModel: viewModels[indexPath.row])
         return cell
     }
@@ -80,6 +82,6 @@ extension ViewController: TableViewCellDelegate {
             viewModels[indexPath.row].rows = .infinite
         }
         
-        tableView.reloadRows(at: [indexPath], with: .none)
+        tableView.reloadRows(at: [indexPath], with: .automatic)
     }
 }

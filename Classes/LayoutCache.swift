@@ -8,27 +8,46 @@
 
 import Foundation
 
-class LayoutCache {
+public class LayoutCache {
     static let shared = LayoutCache()
     
     private var layouts = [AnyHashable: Layout]()
+    private var keys = [AnyHashable]()
+    private var capacity = 500
     
     private init() {
     }
     
-    func getLayout(identifier: String) -> Layout? {
+    func getLayout(identifier: AnyHashable) -> Layout? {
         return layouts[identifier]
     }
     
-    func setLayout(_ layout: Layout, identifier: String) {
+    func setLayout(_ layout: Layout, identifier: AnyHashable) {
         layouts[identifier] = layout
+        setKey(identifier)
     }
     
-    func removeLayout(identifier: String) {
+    func removeLayout(identifier: AnyHashable) {
         layouts.removeValue(forKey: identifier)
+        removeKey(identifier)
     }
     
-    func removeAllLayout() {
+    public func removeAllLayout() {
         layouts.removeAll()
+        keys.removeAll()
+    }
+    
+    func setKey(_ key: AnyHashable) {
+        keys.append(key)
+        if keys.count > capacity {
+            removeLayout(identifier: keys[0])
+        }
+    }
+    
+    func removeKey(_ key: AnyHashable) {
+        guard let index = keys.index(of: key) else {
+            return
+        }
+        keys.remove(at: index)
     }
 }
