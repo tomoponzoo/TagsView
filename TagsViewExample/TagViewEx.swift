@@ -38,7 +38,7 @@ class TagViewEx: TagView {
         
         let size = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 26)
         let rect = (string as NSString).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: [
-            NSFontAttributeName: label.font
+            NSAttributedStringKey.font: label.font
             ], context: nil)
         
         let newSize = rect.size

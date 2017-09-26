@@ -9,16 +9,23 @@
 import UIKit
 import TagsView
 
-class ViewModel: TagsViewLayoutStore {
+class ViewModel {
     let strings: [String]
     
-    var layout: TagsViewLayout?
-    var rows: TagsViewRows = .rows(1)
+    var rows: Rows = .rows(1)
+
+    var identifier: String {
+        switch rows {
+        case .infinite:
+            return "\(strings.first ?? ""):OPN"
+        default:
+            return "\(strings.first ?? ""):CLS"
+        }
+    }
     
     init() {
         let endIndex = arc4random_uniform(20) + 1
         self.strings = (0 ..< endIndex).map { _ in "タグ\(arc4random_uniform(10000000))" }
-        self.layout = TagsViewLayout()
     }
 }
 
@@ -30,7 +37,7 @@ class ViewController: UIViewController {
         }
     }
 
-    fileprivate let viewModels = [ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel()]
+    fileprivate let viewModels = [ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel()]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +62,7 @@ extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell") as! TableViewCell
         cell.delegate = self
+//        cell.tagsView.preferredMaxLayoutWidth = tableView.bounds.width - 16
         cell.updateCell(viewModel: viewModels[indexPath.row])
         return cell
     }
@@ -74,7 +82,6 @@ extension ViewController: TableViewCellDelegate {
             viewModels[indexPath.row].rows = .infinite
         }
         
-        viewModels[indexPath.row].layout?.invalidateLayout()
-        tableView.reloadRows(at: [indexPath], with: .none)
+        tableView.reloadRows(at: [indexPath], with: .automatic)
     }
 }
