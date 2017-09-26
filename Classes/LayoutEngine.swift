@@ -224,9 +224,9 @@ class ColumnsLayout {
         let offset: CGFloat
         let div: CGFloat = alignment == .center ? 2.0 : 1.0
         if let supplymentaryColumn = supplymentaryColumn {
-            offset = (frame.width - supplymentaryColumn.maxX) / div
+            offset = (frame.minX + frame.width - supplymentaryColumn.maxX) / div
         } else {
-            offset = (frame.width - tailColumn.maxX) / div
+            offset = (frame.minX + frame.width - tailColumn.maxX) / div
         }
         
         return columns.map { CGRect(x: $0.minX + offset, y: $0.minY, width: $0.width, height: $0.height) }
@@ -236,7 +236,7 @@ class ColumnsLayout {
         guard let supplymentaryColumn = supplymentaryColumn, alignment != .left else { return self.supplymentaryColumn }
         
         let div: CGFloat = alignment == .center ? 2.0 : 1.0
-        let offset = (frame.width - supplymentaryColumn.maxX) / div
+        let offset = (frame.minX + frame.width - supplymentaryColumn.maxX) / div
         return CGRect(
             x: supplymentaryColumn.minX + offset,
             y: supplymentaryColumn.minY,
