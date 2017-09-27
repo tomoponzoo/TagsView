@@ -49,7 +49,7 @@ class RowsLayout {
     
     var size: CGSize {
         guard let layout = layouts.last else { return .zero }
-        return CGSize(width: layout.frame.width + tagsView.padding.left + tagsView.padding.right, height: layout.frame.maxY + tagsView.padding.bottom)
+        return CGSize(width: layout.frame.width + tagsView.padding.left + tagsView.padding.right, height: layout.frame.maxY + tagsView.padding.top + tagsView.padding.bottom)
     }
     
     var columns: [CGRect] {
@@ -83,7 +83,7 @@ class RowsLayout {
         let supplymentaryTagViewSize = supplymentaryTagView?.intrinsicContentSize
         
         let h = tagViewSizes.reduce(supplymentaryTagViewSize?.height ?? 0) { max($0, $1.height) }
-        let frame = CGRect(x: tagsView.padding.left, y: tagsView.padding.top, width: preferredMaxLayoutWidth, height: h)
+        let frame = CGRect(x: 0, y: 0, width: preferredMaxLayoutWidth, height: h)
         let layout = ColumnsLayout(tagsView: tagsView, frame: frame, index: 0)
         
         _ = tagViewSizes.reduce(layout) { (layout, size) -> ColumnsLayout in
@@ -219,27 +219,52 @@ class ColumnsLayout {
     }
     
     func alignedColumns(_ alignment: Alignment) -> [CGRect] {
-        guard let tailColumn = columns.last, alignment != .left else { return columns }
+        guard let tailColumn = columns.last, alignment != .left else {
+            return columns.map {
+                CGRect(
+                    x: $0.minX + tagsView.padding.left,
+                    y: $0.minY + tagsView.padding.top,
+                    width: $0.width,
+                    height: $0.height
+                )
+            }
+        }
         
         let offset: CGFloat
         let div: CGFloat = alignment == .center ? 2.0 : 1.0
         if let supplymentaryColumn = supplymentaryColumn {
-            offset = (frame.minX + frame.width - supplymentaryColumn.maxX) / div
+            offset = (frame.width - supplymentaryColumn.maxX) / div
         } else {
-            offset = (frame.minX + frame.width - tailColumn.maxX) / div
+            offset = (frame.width - tailColumn.maxX) / div
         }
         
-        return columns.map { CGRect(x: $0.minX + offset, y: $0.minY, width: $0.width, height: $0.height) }
+        return columns.map {
+            CGRect(
+                x: $0.minX + offset + tagsView.padding.left,
+                y: $0.minY + tagsView.padding.top,
+                width: $0.width,
+                height: $0.height
+            )
+        }
     }
     
     func alignedSupplymentaryColumn(_ alignment: Alignment) -> CGRect? {
-        guard let supplymentaryColumn = supplymentaryColumn, alignment != .left else { return self.supplymentaryColumn }
+        guard let supplymentaryColumn = supplymentaryColumn, alignment != .left else {
+            return self.supplymentaryColumn.map {
+                CGRect(
+                    x: $0.minX + tagsView.padding.left,
+                    y: $0.minY + tagsView.padding.top,
+                    width: $0.width,
+                    height: $0.height
+                )
+            }
+        }
         
         let div: CGFloat = alignment == .center ? 2.0 : 1.0
-        let offset = (frame.minX + frame.width - supplymentaryColumn.maxX) / div
+        let offset = (frame.width - supplymentaryColumn.maxX) / div
         return CGRect(
-            x: supplymentaryColumn.minX + offset,
-            y: supplymentaryColumn.minY,
+            x: supplymentaryColumn.minX + offset + tagsView.padding.left,
+            y: supplymentaryColumn.minY + tagsView.padding.top,
             width: supplymentaryColumn.width,
             height: supplymentaryColumn.height
         )
