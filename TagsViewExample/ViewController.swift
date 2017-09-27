@@ -62,7 +62,7 @@ extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell") as! TableViewCell
         cell.delegate = self
-//        cell.tagsView.preferredMaxLayoutWidth = tableView.bounds.width - 16
+        cell.tagsView.preferredMaxLayoutWidth = tableView.bounds.width
         cell.updateCell(viewModel: viewModels[indexPath.row])
         return cell
     }
