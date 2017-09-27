@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = "TagsView"
-  s.version = "2.0.0"
+  s.version = "2.0.1"
   s.summary = "Quickly create a view with tags, written in Swift"
   s.homepage = "https://github.com/tomoponzoo/TagsView"
   s.license = "MIT"
