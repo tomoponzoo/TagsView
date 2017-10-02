@@ -78,20 +78,11 @@ open class TagsView: UIView {
         layoutIdentifier = identifier
         layoutPartition = partition
         
-        let tagViews = (0..<numberOfTags).flatMap { (index) -> TagView? in
-            return self.dataSource?.tagsView(self, viewForIndexAt: index)
+        (0..<numberOfTags).forEach { (index) in
+            _ = self.dataSource?.tagsView(self, viewForIndexAt: index)
         }
         
-        tagViews.filter {
-            $0.superview == nil
-        }.forEach {
-            self.addSubview($0)
-        }
-        
-        let supplymentaryTagView = dataSource?.supplymentaryTagView(in: self)
-        if let supplymentaryTagView = supplymentaryTagView, supplymentaryTagView.superview == nil {
-            self.addSubview(supplymentaryTagView)
-        }
+        _ = dataSource?.supplymentaryTagView(in: self)
         
         invalidateIntrinsicContentSize()
     }
@@ -124,6 +115,7 @@ extension TagsView {
     func newTagView() -> TagView {
         let tagView = tagViewNib?.instantiate(withOwner: nil, options: nil).first as? TagView ?? TagView()
         tagView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(tagView)
         
         return tagView
     }
@@ -131,6 +123,7 @@ extension TagsView {
     func newSupplymentaryTagView() -> SupplymentaryTagView? {
         guard let supplymentaryTagView = supplymentaryTagViewNib?.instantiate(withOwner: nil, options: nil).first as? SupplymentaryTagView else { return nil }
         supplymentaryTagView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(supplymentaryTagView)
         
         return supplymentaryTagView
     }

@@ -68,7 +68,7 @@ extension TableViewCell: TagsViewDataSource {
     func tagsView(_ tagsView: TagsView, viewForIndexAt index: Int) -> TagView? {
         let tagView = tagsView.dequeueReusableTagView(for: index) as? TagViewEx
         tagView?.string = viewModel!.strings[index]
-        tagView?.label.text = viewModel!.strings[index]
+        tagView?.label.text = viewModel!.strings[index]        
         return tagView ?? TagViewEx()
     }
     
