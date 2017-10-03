@@ -30,6 +30,8 @@
 		0CA66A591F78C47B00CD4956 /* Alignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA66A581F78C47B00CD4956 /* Alignment.swift */; };
 		0CA66A5B1F78CEA400CD4956 /* TagsView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA66A5A1F78CEA400CD4956 /* TagsView+Layout.swift */; };
 		0CA66A5D1F78D62300CD4956 /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA66A5C1F78D62300CD4956 /* Layout.swift */; };
+		0CFC457B1F838F6800BD1194 /* TagViewEx2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CFC45791F838F6800BD1194 /* TagViewEx2.xib */; };
+		0CFC457C1F838F6800BD1194 /* TagViewEx2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFC457A1F838F6800BD1194 /* TagViewEx2.swift */; };
 		558BA0DB1E6DBB0F0015E459 /* SupplymentaryTagViewEx.xib in Resources */ = {isa = PBXBuildFile; fileRef = 558BA0DA1E6DBB0F0015E459 /* SupplymentaryTagViewEx.xib */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +84,8 @@
 		0CA66A581F78C47B00CD4956 /* Alignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alignment.swift; sourceTree = "<group>"; };
 		0CA66A5A1F78CEA400CD4956 /* TagsView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TagsView+Layout.swift"; sourceTree = "<group>"; };
 		0CA66A5C1F78D62300CD4956 /* Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
+		0CFC45791F838F6800BD1194 /* TagViewEx2.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TagViewEx2.xib; sourceTree = "<group>"; };
+		0CFC457A1F838F6800BD1194 /* TagViewEx2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagViewEx2.swift; sourceTree = "<group>"; };
 		558BA0DA1E6DBB0F0015E459 /* SupplymentaryTagViewEx.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SupplymentaryTagViewEx.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -139,9 +143,11 @@
 				0C5CEAB41E4DBC91002736F3 /* ViewController.swift */,
 				0C7B21571E6FA17A004C0FDA /* TableViewCell.swift */,
 				0C7B21591E6FA1CE004C0FDA /* TagViewEx.swift */,
+				0CFC457A1F838F6800BD1194 /* TagViewEx2.swift */,
 				0C7B215B1E6FA1FF004C0FDA /* SupplymentaryTagView.swift */,
 				0C5CEAB61E4DBC91002736F3 /* Main.storyboard */,
 				0C7B214B1E6D656E004C0FDA /* TagViewEx.xib */,
+				0CFC45791F838F6800BD1194 /* TagViewEx2.xib */,
 				558BA0DA1E6DBB0F0015E459 /* SupplymentaryTagViewEx.xib */,
 				0C5CEAB91E4DBC91002736F3 /* Assets.xcassets */,
 				0C5CEABB1E4DBC91002736F3 /* LaunchScreen.storyboard */,
@@ -277,6 +283,7 @@
 				0C5CEABA1E4DBC91002736F3 /* Assets.xcassets in Resources */,
 				0C7B214C1E6D656E004C0FDA /* TagViewEx.xib in Resources */,
 				0C5CEAB81E4DBC91002736F3 /* Main.storyboard in Resources */,
+				0CFC457B1F838F6800BD1194 /* TagViewEx2.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,6 +315,7 @@
 				0C7B215C1E6FA1FF004C0FDA /* SupplymentaryTagView.swift in Sources */,
 				0C7B21581E6FA17A004C0FDA /* TableViewCell.swift in Sources */,
 				0C5CEAB51E4DBC91002736F3 /* ViewController.swift in Sources */,
+				0CFC457C1F838F6800BD1194 /* TagViewEx2.swift in Sources */,
 				0C7B215A1E6FA1CE004C0FDA /* TagViewEx.swift in Sources */,
 				0C5CEAB31E4DBC91002736F3 /* AppDelegate.swift in Sources */,
 			);

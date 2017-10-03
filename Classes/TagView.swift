@@ -14,6 +14,7 @@ open class BaseTagView: UIView {
 }
 
 open class TagView: BaseTagView {
+    open var reuseIdentifier = "default"
 }
 
 open class SupplymentaryTagView: BaseTagView {

@@ -18,6 +18,7 @@ class TableViewCell: UITableViewCell {
     @IBOutlet weak var tagsView: TagsView! {
         didSet {
             tagsView.registerTagView(nib: UINib(nibName: "TagViewEx", bundle: nil))
+            tagsView.registerTagView(nib: UINib(nibName: "TagViewEx2", bundle: nil), forReuseIdentifier: "TagViewEx2")
             tagsView.registerSupplymentaryTagView(nib: UINib(nibName: "SupplymentaryTagViewEx", bundle: nil))
             tagsView.dataSource = self
             tagsView.delegate = self
@@ -66,10 +67,17 @@ extension TableViewCell: TagsViewDataSource {
     }
    
     func tagsView(_ tagsView: TagsView, viewForIndexAt index: Int) -> TagView? {
-        let tagView = tagsView.dequeueReusableTagView(for: index) as? TagViewEx
-        tagView?.string = viewModel!.strings[index]
-        tagView?.label.text = viewModel!.strings[index]
-        return tagView ?? TagViewEx()
+        if let reuseIdentifier = viewModel?.reuseIdentifier {
+            let tagView = tagsView.dequeueReusableTagView(for: index, withReuseIdentifier: reuseIdentifier) as? TagViewEx2
+            tagView?.string = viewModel!.strings[index]
+            tagView?.label.text = viewModel!.strings[index]
+            return tagView ?? TagViewEx2()
+        } else {
+            let tagView = tagsView.dequeueReusableTagView(for: index) as? TagViewEx
+            tagView?.string = viewModel!.strings[index]
+            tagView?.label.text = viewModel!.strings[index]
+            return tagView ?? TagViewEx()
+        }
     }
     
     func supplymentaryTagView(in tagsView: TagsView) -> SupplymentaryTagView? {
