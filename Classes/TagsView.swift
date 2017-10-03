@@ -40,9 +40,9 @@ open class TagsView: UIView {
     var layoutIdentifier: String?
     var layoutPartition: String?
     
-    var tagViewNib: UINib?
+    var tagViewNibs = [String: UINib]()
     var supplymentaryTagViewNib: UINib?
-    
+
     var tagViews: [TagView] {
         return subviews.flatMap { $0 as? TagView }
     }
@@ -61,12 +61,13 @@ open class TagsView: UIView {
         setupView()
     }
     
-    public func registerTagView(nib: UINib?) {
-        self.tagViewNib = nib
+    public func registerTagView(nib: UINib?, forReuseIdentifier reuseIdentifier: String = "default") {
+        guard let nib = nib else { return }
+        tagViewNibs[reuseIdentifier] = nib
     }
     
     public func registerSupplymentaryTagView(nib: UINib?) {
-        self.supplymentaryTagViewNib = nib
+        supplymentaryTagViewNib = nib
     }
     
     public func reloadData() {
@@ -112,10 +113,11 @@ extension TagsView {
     func setupView() {
     }
     
-    func newTagView() -> TagView {
-        let tagView = tagViewNib?.instantiate(withOwner: nil, options: nil).first as? TagView ?? TagView()
+    func newTagView(for index: Int, withReuseIdentifier reuseIdentifier: String) -> TagView {
+        let tagView = tagViewNibs[reuseIdentifier]?.instantiate(withOwner: nil, options: nil).first as? TagView ?? TagView()
         tagView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(tagView)
+        tagView.reuseIdentifier = reuseIdentifier
+        insertSubview(tagView, at: index)
         
         return tagView
     }
@@ -142,6 +144,15 @@ extension TagsView {
                 }
             }
             tagView.isSelected = true
+        }
+    }
+    
+    func tagView(at index: Int, withReuseIdentifier reuseIdentifier: String) -> TagView? {
+        let filteredTagViews = tagViews.filter { $0.reuseIdentifier == reuseIdentifier }
+        if index < filteredTagViews.count {
+            return filteredTagViews[index]
+        } else {
+            return nil
         }
     }
 }
@@ -188,12 +199,13 @@ extension TagsView {
 
 // MARK: - Recycle views
 extension TagsView {
-    open func dequeueReusableTagView(for index: Int) -> TagView {
-        if let tagView = tagView(at: index) {
+    open func dequeueReusableTagView(for index: Int, withReuseIdentifier reuseIdentifier: String = "default") -> TagView {
+        if let tagView = tagView(at: index, withReuseIdentifier: reuseIdentifier) {
+            insertSubview(tagView, at: index)
             return tagView
         }
         
-        return newTagView()
+        return newTagView(for: index, withReuseIdentifier: reuseIdentifier)
     }
     
     open func dequeueReusableSupplymentaryTagView() -> SupplymentaryTagView? {

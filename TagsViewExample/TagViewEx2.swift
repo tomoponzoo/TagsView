@@ -9,7 +9,7 @@
 import UIKit
 import TagsView
 
-class TagViewEx: TagView {
+class TagViewEx2: TagView {
     @IBOutlet weak var label: UILabel!
     
     var string: String?
@@ -28,7 +28,7 @@ class TagViewEx: TagView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        layer.cornerRadius = 3
+        layer.cornerRadius = 13
         layer.borderWidth = 1
         layer.borderColor = UIColor.black.cgColor
     }
@@ -45,4 +45,3 @@ class TagViewEx: TagView {
         return CGSize(width: newSize.width + 12, height: 26)
     }
 }
-

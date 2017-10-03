@@ -23,9 +23,12 @@ class ViewModel {
         }
     }
     
+    let reuseIdentifier: String?
+    
     init() {
         let endIndex = arc4random_uniform(20) + 1
         self.strings = (0 ..< endIndex).map { _ in "タグ\(arc4random_uniform(10000000))" }
+        reuseIdentifier = endIndex % 2 == 0 ? nil : "TagViewEx2"
     }
 }
 
