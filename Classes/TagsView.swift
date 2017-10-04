@@ -105,6 +105,28 @@ open class TagsView: UIView {
     public func tagView(at index: Int) -> TagView? {
         return index < tagViews.count ? tagViews[index] : nil
     }
+    
+    public var indexForSupplymentaryView: Int? {
+        let engine = LayoutEngine(tagsView: self, preferredMaxLayoutWidth: preferredMaxLayoutWidth)
+        let layout = engine.layout(identifier: layoutIdentifier, partition: layoutPartition)
+        
+        guard let supplymentaryColumn = layout.supplymentaryColumn else {
+            return nil
+        }
+        
+        var index = 0
+        for column in layout.columns {
+            if column.minY < supplymentaryColumn.minY {
+                index += 1
+            } else if column.minX < supplymentaryColumn.minX {
+                index += 1
+            } else {
+                break
+            }
+        }
+        
+        return index
+    }
 }
 
 // MARK: - Private

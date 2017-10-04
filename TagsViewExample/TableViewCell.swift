@@ -33,6 +33,10 @@ class TableViewCell: UITableViewCell {
         self.viewModel = viewModel
         tagsView.reloadData(identifier: viewModel.identifier)
     }
+    
+    func checkSupplymentaryIndex() {
+        print(tagsView.indexForSupplymentaryView)
+    }
 }
 
 extension TableViewCell: TagsViewDataSource {
