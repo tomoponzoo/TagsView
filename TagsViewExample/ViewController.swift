@@ -10,25 +10,47 @@ import UIKit
 import TagsView
 
 class ViewModel {
-    let strings: [String]
+    struct TagData {
+        let string: String
+        let reuseIdentifier: String?
+    }
+    
+    let tagDatas: [TagData]
     
     var rows: Rows = .rows(1)
 
     var identifier: String {
         switch rows {
         case .infinite:
-            return "\(strings.first ?? ""):OPN"
+            return "\(tagDatas.first?.string ?? ""):OPN"
         default:
-            return "\(strings.first ?? ""):CLS"
+            return "\(tagDatas.first?.string ?? ""):CLS"
         }
     }
     
-    let reuseIdentifier: String?
-    
     init() {
         let endIndex = arc4random_uniform(20) + 1
-        self.strings = (0 ..< endIndex).map { _ in "タグ\(arc4random_uniform(10000000))" }
-        reuseIdentifier = endIndex % 2 == 0 ? nil : "TagViewEx2"
+        self.tagDatas = (0 ..< endIndex).map { (n) -> TagData in
+            let isTag1 = arc4random_uniform(UInt32(n)) % 2 == 0
+            
+            let num: Int
+            if n % 11 == 0 {
+                num = 10000000
+            } else if n % 7 == 0 {
+                num = 1000000000
+            } else if n % 5 == 0 {
+                num = 10
+            } else if n % 3 == 0 {
+                num = 1000
+            } else {
+                num = 100000
+            }
+            
+            return TagData(
+                string: "タグ\(arc4random_uniform(UInt32(num)))",
+                reuseIdentifier: isTag1 ? "TagViewEx" : "TagViewEx2"
+            )
+        }
     }
 }
 
@@ -40,7 +62,8 @@ class ViewController: UIViewController {
         }
     }
 
-    fileprivate let viewModels = [ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel()]
+//    fileprivate let viewModels = [ViewModel()]
+    fileprivate let viewModels = [ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel(), ViewModel()]
     
     override func viewDidLoad() {
         super.viewDidLoad()
