@@ -15,9 +15,9 @@ public protocol TagsViewDataSource: class {
     func alignment(in tagsView: TagsView) -> Alignment
     func padding(in tagsView: TagsView) -> UIEdgeInsets
     func spacer(in tagsView: TagsView) -> Spacer
-    func isVisibleSupplymentaryTagView(in tagsView: TagsView, rows: Rows, row: Int, hasNextRow: Bool) -> Bool
+    func isVisibleSupplementaryTagView(in tagsView: TagsView, rows: Rows, row: Int, hasNextRow: Bool) -> Bool
     func tagsView(_ tagsView: TagsView, viewForIndexAt index: Int) -> TagView?
-    func supplymentaryTagView(in tagsView: TagsView) -> SupplymentaryTagView?
+    func supplementaryTagView(in tagsView: TagsView) -> SupplementaryTagView?
 }
 
 extension TagsViewDataSource {
@@ -25,7 +25,7 @@ extension TagsViewDataSource {
     public func alignment(in tagsView: TagsView) -> Alignment { return .left }
     public func padding(in tagsView: TagsView) -> UIEdgeInsets { return .zero }
     public func spacer(in tagsView: TagsView) -> Spacer { return .init(vertical: 8, horizontal: 8) }
-    public func isVisibleSupplymentaryTagView(in tagsView: TagsView, rows: Rows, row: Int, hasNextRow: Bool) -> Bool { return false }
+    public func isVisibleSupplementaryTagView(in tagsView: TagsView, rows: Rows, row: Int, hasNextRow: Bool) -> Bool { return false }
     public func tagsView(_ tagsView: TagsView, viewForIndexAt index: Int) -> TagView? { return nil }
-    public func supplymentaryTagView(in tagsView: TagsView) -> SupplymentaryTagView? { return nil }
+    public func supplementaryTagView(in tagsView: TagsView) -> SupplementaryTagView? { return nil }
 }

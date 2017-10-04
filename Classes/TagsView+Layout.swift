@@ -43,25 +43,25 @@ extension TagsView {
             tagView.isHidden = false
         }
 
-        if let supplymentaryTagView = supplymentaryTagView {
-            supplymentaryTagView.constraints.filter { (constraint) -> Bool in
-                if let firstItem = constraint.firstItem as? UIView, firstItem == supplymentaryTagView, constraint.secondItem == nil {
+        if let supplementaryTagView = supplementaryTagView {
+            supplementaryTagView.constraints.filter { (constraint) -> Bool in
+                if let firstItem = constraint.firstItem as? UIView, firstItem == supplementaryTagView, constraint.secondItem == nil {
                     return true
                 } else {
                     return false
                 }
             }.forEach { (constraint) in
-                supplymentaryTagView.removeConstraint(constraint)
+                supplementaryTagView.removeConstraint(constraint)
             }
-            supplymentaryTagView.isHidden = true
+            supplementaryTagView.isHidden = true
         }
         
-        if let supplymentaryTagView = supplymentaryTagView, let column = layout.supplymentaryColumn {
-            supplymentaryTagView.leftAnchor.constraint(equalTo: leftAnchor, constant: column.minX).isActive = true
-            supplymentaryTagView.topAnchor.constraint(equalTo: topAnchor, constant: column.minY).isActive = true
-            supplymentaryTagView.widthAnchor.constraint(equalToConstant: column.width).isActive = true
-            supplymentaryTagView.heightAnchor.constraint(equalToConstant: column.height).isActive = true
-            supplymentaryTagView.isHidden = false
+        if let supplementaryTagView = supplementaryTagView, let column = layout.supplementaryColumn {
+            supplementaryTagView.leftAnchor.constraint(equalTo: leftAnchor, constant: column.minX).isActive = true
+            supplementaryTagView.topAnchor.constraint(equalTo: topAnchor, constant: column.minY).isActive = true
+            supplementaryTagView.widthAnchor.constraint(equalToConstant: column.width).isActive = true
+            supplementaryTagView.heightAnchor.constraint(equalToConstant: column.height).isActive = true
+            supplementaryTagView.isHidden = false
         }
 
         super.updateConstraints()

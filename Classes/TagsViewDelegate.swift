@@ -10,5 +10,5 @@ import Foundation
 
 public protocol TagsViewDelegate: class {
     func tagsView(_ tagsView: TagsView, didSelectItemAt index: Int)
-    func didSelectSupplymentaryItem(_ tagsView: TagsView)
+    func didSelectSupplementaryItem(_ tagsView: TagsView)
 }

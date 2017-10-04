@@ -20,7 +20,7 @@
 		0C7B21561E6F9D21004C0FDA /* TagsView.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0C5CEAA11E4DBC40002736F3 /* TagsView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0C7B21581E6FA17A004C0FDA /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7B21571E6FA17A004C0FDA /* TableViewCell.swift */; };
 		0C7B215A1E6FA1CE004C0FDA /* TagViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7B21591E6FA1CE004C0FDA /* TagViewEx.swift */; };
-		0C7B215C1E6FA1FF004C0FDA /* SupplymentaryTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7B215B1E6FA1FF004C0FDA /* SupplymentaryTagView.swift */; };
+		0C7B215C1E6FA1FF004C0FDA /* SupplementaryTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7B215B1E6FA1FF004C0FDA /* SupplementaryTagView.swift */; };
 		0CA66A4B1F78B64A00CD4956 /* LayoutEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA66A4A1F78B64A00CD4956 /* LayoutEngine.swift */; };
 		0CA66A4F1F78C25200CD4956 /* TagsViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA66A4E1F78C25200CD4956 /* TagsViewDataSource.swift */; };
 		0CA66A511F78C28900CD4956 /* TagsViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA66A501F78C28900CD4956 /* TagsViewDelegate.swift */; };
@@ -32,7 +32,7 @@
 		0CA66A5D1F78D62300CD4956 /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA66A5C1F78D62300CD4956 /* Layout.swift */; };
 		0CFC457B1F838F6800BD1194 /* TagViewEx2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CFC45791F838F6800BD1194 /* TagViewEx2.xib */; };
 		0CFC457C1F838F6800BD1194 /* TagViewEx2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFC457A1F838F6800BD1194 /* TagViewEx2.swift */; };
-		558BA0DB1E6DBB0F0015E459 /* SupplymentaryTagViewEx.xib in Resources */ = {isa = PBXBuildFile; fileRef = 558BA0DA1E6DBB0F0015E459 /* SupplymentaryTagViewEx.xib */; };
+		558BA0DB1E6DBB0F0015E459 /* SupplementaryTagViewEx.xib in Resources */ = {isa = PBXBuildFile; fileRef = 558BA0DA1E6DBB0F0015E459 /* SupplementaryTagViewEx.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,7 +74,7 @@
 		0C7B214B1E6D656E004C0FDA /* TagViewEx.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TagViewEx.xib; sourceTree = "<group>"; };
 		0C7B21571E6FA17A004C0FDA /* TableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		0C7B21591E6FA1CE004C0FDA /* TagViewEx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagViewEx.swift; sourceTree = "<group>"; };
-		0C7B215B1E6FA1FF004C0FDA /* SupplymentaryTagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupplymentaryTagView.swift; sourceTree = "<group>"; };
+		0C7B215B1E6FA1FF004C0FDA /* SupplementaryTagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupplementaryTagView.swift; sourceTree = "<group>"; };
 		0CA66A4A1F78B64A00CD4956 /* LayoutEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutEngine.swift; sourceTree = "<group>"; };
 		0CA66A4E1F78C25200CD4956 /* TagsViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsViewDataSource.swift; sourceTree = "<group>"; };
 		0CA66A501F78C28900CD4956 /* TagsViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsViewDelegate.swift; sourceTree = "<group>"; };
@@ -86,7 +86,7 @@
 		0CA66A5C1F78D62300CD4956 /* Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
 		0CFC45791F838F6800BD1194 /* TagViewEx2.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TagViewEx2.xib; sourceTree = "<group>"; };
 		0CFC457A1F838F6800BD1194 /* TagViewEx2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagViewEx2.swift; sourceTree = "<group>"; };
-		558BA0DA1E6DBB0F0015E459 /* SupplymentaryTagViewEx.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SupplymentaryTagViewEx.xib; sourceTree = "<group>"; };
+		558BA0DA1E6DBB0F0015E459 /* SupplementaryTagViewEx.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SupplementaryTagViewEx.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,11 +144,11 @@
 				0C7B21571E6FA17A004C0FDA /* TableViewCell.swift */,
 				0C7B21591E6FA1CE004C0FDA /* TagViewEx.swift */,
 				0CFC457A1F838F6800BD1194 /* TagViewEx2.swift */,
-				0C7B215B1E6FA1FF004C0FDA /* SupplymentaryTagView.swift */,
+				0C7B215B1E6FA1FF004C0FDA /* SupplementaryTagView.swift */,
 				0C5CEAB61E4DBC91002736F3 /* Main.storyboard */,
 				0C7B214B1E6D656E004C0FDA /* TagViewEx.xib */,
 				0CFC45791F838F6800BD1194 /* TagViewEx2.xib */,
-				558BA0DA1E6DBB0F0015E459 /* SupplymentaryTagViewEx.xib */,
+				558BA0DA1E6DBB0F0015E459 /* SupplementaryTagViewEx.xib */,
 				0C5CEAB91E4DBC91002736F3 /* Assets.xcassets */,
 				0C5CEABB1E4DBC91002736F3 /* LaunchScreen.storyboard */,
 				0C5CEABE1E4DBC91002736F3 /* Info.plist */,
@@ -279,7 +279,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C5CEABD1E4DBC91002736F3 /* LaunchScreen.storyboard in Resources */,
-				558BA0DB1E6DBB0F0015E459 /* SupplymentaryTagViewEx.xib in Resources */,
+				558BA0DB1E6DBB0F0015E459 /* SupplementaryTagViewEx.xib in Resources */,
 				0C5CEABA1E4DBC91002736F3 /* Assets.xcassets in Resources */,
 				0C7B214C1E6D656E004C0FDA /* TagViewEx.xib in Resources */,
 				0C5CEAB81E4DBC91002736F3 /* Main.storyboard in Resources */,
@@ -312,7 +312,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C7B215C1E6FA1FF004C0FDA /* SupplymentaryTagView.swift in Sources */,
+				0C7B215C1E6FA1FF004C0FDA /* SupplementaryTagView.swift in Sources */,
 				0C7B21581E6FA17A004C0FDA /* TableViewCell.swift in Sources */,
 				0C5CEAB51E4DBC91002736F3 /* ViewController.swift in Sources */,
 				0CFC457C1F838F6800BD1194 /* TagViewEx2.swift in Sources */,

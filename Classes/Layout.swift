@@ -11,11 +11,11 @@ import Foundation
 class Layout {
     let size: CGSize
     let columns: [CGRect]
-    let supplymentaryColumn: CGRect?
+    let supplementaryColumn: CGRect?
     
     init(layout: RowsLayout) {
         size = layout.size
         columns = layout.columns
-        supplymentaryColumn = layout.supplymentaryColumn
+        supplementaryColumn = layout.supplementaryColumn
     }
 }

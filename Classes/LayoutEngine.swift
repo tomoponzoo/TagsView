@@ -56,8 +56,8 @@ class RowsLayout {
         return layouts.flatMap { $0.alignedColumns(self.tagsView.layoutProperties.alignment) }
     }
     
-    var supplymentaryColumn: CGRect? {
-        return tailLayout?.alignedSupplymentaryColumn(tagsView.layoutProperties.alignment)
+    var supplementaryColumn: CGRect? {
+        return tailLayout?.alignedSupplementaryColumn(tagsView.layoutProperties.alignment)
     }
     
     var tailLayout: ColumnsLayout? {
@@ -79,10 +79,10 @@ class RowsLayout {
         }
         let tagViewSizes = tagViews.map { $0.intrinsicContentSize }
         
-        let supplymentaryTagView = tagsView.dataSource?.supplymentaryTagView(in: tagsView)
-        let supplymentaryTagViewSize = supplymentaryTagView?.intrinsicContentSize
+        let supplementaryTagView = tagsView.dataSource?.supplementaryTagView(in: tagsView)
+        let supplementaryTagViewSize = supplementaryTagView?.intrinsicContentSize
         
-        let h = tagViewSizes.reduce(supplymentaryTagViewSize?.height ?? 0) { max($0, $1.height) }
+        let h = tagViewSizes.reduce(supplementaryTagViewSize?.height ?? 0) { max($0, $1.height) }
         let frame = CGRect(x: 0, y: 0, width: preferredMaxLayoutWidth, height: h)
         let layout = ColumnsLayout(tagsView: tagsView, frame: frame, index: 0)
         
@@ -92,7 +92,7 @@ class RowsLayout {
         
         layouts = [ColumnsLayout](layout)
         
-        tailLayout?.set(wishSupplymentaryTagViewSize: supplymentaryTagViewSize)
+        tailLayout?.set(wishSupplementaryTagViewSize: supplementaryTagViewSize)
     }
 }
 
@@ -102,7 +102,7 @@ class ColumnsLayout {
     let index: Int
     
     var columns = [CGRect]()
-    var supplymentaryColumn: CGRect?
+    var supplementaryColumn: CGRect?
     var x: CGFloat
     
     var nextLayout: ColumnsLayout?
@@ -188,10 +188,10 @@ class ColumnsLayout {
         return column
     }
     
-    func set(wishSupplymentaryTagViewSize size: CGSize?) {
+    func set(wishSupplementaryTagViewSize size: CGSize?) {
         guard let size = size else { return }
         
-        let isVisible = tagsView.dataSource?.isVisibleSupplymentaryTagView(
+        let isVisible = tagsView.dataSource?.isVisibleSupplementaryTagView(
             in: tagsView,
             rows: tagsView.numberOfRows,
             row: index,
@@ -214,7 +214,7 @@ class ColumnsLayout {
             x += spacer.horizontal
             x += size.width
             
-            supplymentaryColumn = CGRect(x: x - size.width, y: frame.minY, width: size.width, height: frame.height)
+            supplementaryColumn = CGRect(x: x - size.width, y: frame.minY, width: size.width, height: frame.height)
         }
     }
     
@@ -232,8 +232,8 @@ class ColumnsLayout {
         
         let offset: CGFloat
         let div: CGFloat = alignment == .center ? 2.0 : 1.0
-        if let supplymentaryColumn = supplymentaryColumn {
-            offset = (frame.width - supplymentaryColumn.maxX) / div
+        if let supplementaryColumn = supplementaryColumn {
+            offset = (frame.width - supplementaryColumn.maxX) / div
         } else {
             offset = (frame.width - tailColumn.maxX) / div
         }
@@ -248,9 +248,9 @@ class ColumnsLayout {
         }
     }
     
-    func alignedSupplymentaryColumn(_ alignment: Alignment) -> CGRect? {
-        guard let supplymentaryColumn = supplymentaryColumn, alignment != .left else {
-            return self.supplymentaryColumn.map {
+    func alignedSupplementaryColumn(_ alignment: Alignment) -> CGRect? {
+        guard let supplementaryColumn = supplementaryColumn, alignment != .left else {
+            return self.supplementaryColumn.map {
                 CGRect(
                     x: $0.minX + tagsView.padding.left,
                     y: $0.minY + tagsView.padding.top,
@@ -261,12 +261,12 @@ class ColumnsLayout {
         }
         
         let div: CGFloat = alignment == .center ? 2.0 : 1.0
-        let offset = (frame.width - supplymentaryColumn.maxX) / div
+        let offset = (frame.width - supplementaryColumn.maxX) / div
         return CGRect(
-            x: supplymentaryColumn.minX + offset + tagsView.padding.left,
-            y: supplymentaryColumn.minY + tagsView.padding.top,
-            width: supplymentaryColumn.width,
-            height: supplymentaryColumn.height
+            x: supplementaryColumn.minX + offset + tagsView.padding.left,
+            y: supplementaryColumn.minY + tagsView.padding.top,
+            width: supplementaryColumn.width,
+            height: supplementaryColumn.height
         )
     }
 }

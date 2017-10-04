@@ -74,7 +74,7 @@ extension ViewController: UITableViewDataSource {
 extension ViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        (cell as? TableViewCell)?.checkSupplymentaryIndex()
+        (cell as? TableViewCell)?.checkSupplementaryIndex()
     }
 }
 
@@ -82,7 +82,7 @@ extension ViewController: TableViewCellDelegate {
     internal func tableViewCell(_ cell: TableViewCell, tagsView: TagsView, didSelectItemAt index: Int) {
     }
 
-    internal func tableViewCell(_ cell: TableViewCell, didSelectSupplymentaryItemInTagsView tagsView: TagsView) {
+    internal func tableViewCell(_ cell: TableViewCell, didSelectSupplementaryItemInTagsView tagsView: TagsView) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         
         switch viewModels[indexPath.row].rows {

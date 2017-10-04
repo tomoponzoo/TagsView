@@ -41,14 +41,14 @@ open class TagsView: UIView {
     var layoutPartition: String?
     
     var tagViewNibs = [String: UINib]()
-    var supplymentaryTagViewNib: UINib?
+    var supplementaryTagViewNib: UINib?
 
     var tagViews: [TagView] {
         return subviews.flatMap { $0 as? TagView }
     }
     
-    var supplymentaryTagView: SupplymentaryTagView? {
-        return subviews.flatMap { $0 as? SupplymentaryTagView }.first
+    var supplementaryTagView: SupplementaryTagView? {
+        return subviews.flatMap { $0 as? SupplementaryTagView }.first
     }
     
     public override init(frame: CGRect) {
@@ -66,8 +66,8 @@ open class TagsView: UIView {
         tagViewNibs[reuseIdentifier] = nib
     }
     
-    public func registerSupplymentaryTagView(nib: UINib?) {
-        supplymentaryTagViewNib = nib
+    public func registerSupplementaryTagView(nib: UINib?) {
+        supplementaryTagViewNib = nib
     }
     
     public func reloadData() {
@@ -83,7 +83,7 @@ open class TagsView: UIView {
             _ = self.dataSource?.tagsView(self, viewForIndexAt: index)
         }
         
-        _ = dataSource?.supplymentaryTagView(in: self)
+        _ = dataSource?.supplementaryTagView(in: self)
         
         invalidateIntrinsicContentSize()
     }
@@ -106,19 +106,19 @@ open class TagsView: UIView {
         return index < tagViews.count ? tagViews[index] : nil
     }
     
-    public var indexForSupplymentaryView: Int? {
+    public var indexForSupplementaryView: Int? {
         let engine = LayoutEngine(tagsView: self, preferredMaxLayoutWidth: preferredMaxLayoutWidth)
         let layout = engine.layout(identifier: layoutIdentifier, partition: layoutPartition)
         
-        guard let supplymentaryColumn = layout.supplymentaryColumn else {
+        guard let supplementaryColumn = layout.supplementaryColumn else {
             return nil
         }
         
         var index = 0
         for column in layout.columns {
-            if column.minY < supplymentaryColumn.minY {
+            if column.minY < supplementaryColumn.minY {
                 index += 1
-            } else if column.minX < supplymentaryColumn.minX {
+            } else if column.minX < supplementaryColumn.minX {
                 index += 1
             } else {
                 break
@@ -144,12 +144,12 @@ extension TagsView {
         return tagView
     }
     
-    func newSupplymentaryTagView() -> SupplymentaryTagView? {
-        guard let supplymentaryTagView = supplymentaryTagViewNib?.instantiate(withOwner: nil, options: nil).first as? SupplymentaryTagView else { return nil }
-        supplymentaryTagView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(supplymentaryTagView)
+    func newSupplementaryTagView() -> SupplementaryTagView? {
+        guard let supplementaryTagView = supplementaryTagViewNib?.instantiate(withOwner: nil, options: nil).first as? SupplementaryTagView else { return nil }
+        supplementaryTagView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(supplementaryTagView)
         
-        return supplymentaryTagView
+        return supplementaryTagView
     }
     
     func selectTag(tagView: TagView, isEvent: Bool = false) {
@@ -204,9 +204,9 @@ extension TagsView {
                     selectTag(tagView: tagView, isEvent: true)
                     delegate?.tagsView(self, didSelectItemAt: index)
                 }
-                if let _ = view as? SupplymentaryTagView {
+                if let _ = view as? SupplementaryTagView {
                     view.isSelected = !view.isSelected
-                    delegate?.didSelectSupplymentaryItem(self)
+                    delegate?.didSelectSupplementaryItem(self)
                 }
             }
         }
@@ -230,11 +230,11 @@ extension TagsView {
         return newTagView(for: index, withReuseIdentifier: reuseIdentifier)
     }
     
-    open func dequeueReusableSupplymentaryTagView() -> SupplymentaryTagView? {
-        if let supplymentaryTagView = supplymentaryTagView {
-            return supplymentaryTagView
+    open func dequeueReusableSupplementaryTagView() -> SupplementaryTagView? {
+        if let supplementaryTagView = supplementaryTagView {
+            return supplementaryTagView
         }
         
-        return newSupplymentaryTagView()
+        return newSupplementaryTagView()
     }
 }

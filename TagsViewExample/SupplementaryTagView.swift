@@ -1,5 +1,5 @@
 //
-//  SupplymentaryTagView.swift
+//  SupplementaryTagView.swift
 //  TagsView
 //
 //  Created by Tomoki Koga on 2017/03/08.
@@ -9,7 +9,7 @@
 import UIKit
 import TagsView
 
-class SupplymentaryTagViewEx: SupplymentaryTagView {
+class SupplementaryTagViewEx: SupplementaryTagView {
     
     override func awakeFromNib() {
         super.awakeFromNib()

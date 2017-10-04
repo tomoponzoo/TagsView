@@ -11,7 +11,7 @@ import TagsView
 
 protocol TableViewCellDelegate: class {
     func tableViewCell(_ cell: TableViewCell, tagsView: TagsView, didSelectItemAt index: Int)
-    func tableViewCell(_ cell: TableViewCell, didSelectSupplymentaryItemInTagsView tagsView: TagsView)
+    func tableViewCell(_ cell: TableViewCell, didSelectSupplementaryItemInTagsView tagsView: TagsView)
 }
 
 class TableViewCell: UITableViewCell {
@@ -19,7 +19,7 @@ class TableViewCell: UITableViewCell {
         didSet {
             tagsView.registerTagView(nib: UINib(nibName: "TagViewEx", bundle: nil))
             tagsView.registerTagView(nib: UINib(nibName: "TagViewEx2", bundle: nil), forReuseIdentifier: "TagViewEx2")
-            tagsView.registerSupplymentaryTagView(nib: UINib(nibName: "SupplymentaryTagViewEx", bundle: nil))
+            tagsView.registerSupplementaryTagView(nib: UINib(nibName: "SupplementaryTagViewEx", bundle: nil))
             tagsView.dataSource = self
             tagsView.delegate = self
             tagsView.allowsMultipleSelection = true
@@ -34,8 +34,8 @@ class TableViewCell: UITableViewCell {
         tagsView.reloadData(identifier: viewModel.identifier)
     }
     
-    func checkSupplymentaryIndex() {
-        print(tagsView.indexForSupplymentaryView)
+    func checkSupplementaryIndex() {
+        print(tagsView.indexForSupplementaryView)
     }
 }
 
@@ -60,7 +60,7 @@ extension TableViewCell: TagsViewDataSource {
         return Spacer(vertical: 4, horizontal: 4)
     }
     
-    func isVisibleSupplymentaryTagView(in tagsView: TagsView, rows: Rows, row: Int, hasNextRow: Bool) -> Bool {
+    func isVisibleSupplementaryTagView(in tagsView: TagsView, rows: Rows, row: Int, hasNextRow: Bool) -> Bool {
         switch rows {
         case .infinite:
             return row > 0
@@ -84,9 +84,9 @@ extension TableViewCell: TagsViewDataSource {
         }
     }
     
-    func supplymentaryTagView(in tagsView: TagsView) -> SupplymentaryTagView? {
-        let supplymentaryTagView = tagsView.dequeueReusableSupplymentaryTagView() as? SupplymentaryTagViewEx
-        return supplymentaryTagView
+    func supplementaryTagView(in tagsView: TagsView) -> SupplementaryTagView? {
+        let supplementaryTagView = tagsView.dequeueReusableSupplementaryTagView() as? SupplementaryTagViewEx
+        return supplementaryTagView
     }
 }
 
@@ -96,8 +96,8 @@ extension TableViewCell: TagsViewDelegate {
         delegate?.tableViewCell(self, tagsView: tagsView, didSelectItemAt: index)
     }
     
-    func didSelectSupplymentaryItem(_ tagsView: TagsView) {
-        print("Supplymentary select")
-        delegate?.tableViewCell(self, didSelectSupplymentaryItemInTagsView: tagsView)
+    func didSelectSupplementaryItem(_ tagsView: TagsView) {
+        print("Supplementary select")
+        delegate?.tableViewCell(self, didSelectSupplementaryItemInTagsView: tagsView)
     }
 }
