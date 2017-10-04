@@ -17,7 +17,7 @@ protocol TableViewCellDelegate: class {
 class TableViewCell: UITableViewCell {
     @IBOutlet weak var tagsView: TagsView! {
         didSet {
-            tagsView.registerTagView(nib: UINib(nibName: "TagViewEx", bundle: nil))
+            tagsView.registerTagView(nib: UINib(nibName: "TagViewEx", bundle: nil), forReuseIdentifier: "TagViewEx")
             tagsView.registerTagView(nib: UINib(nibName: "TagViewEx2", bundle: nil), forReuseIdentifier: "TagViewEx2")
             tagsView.registerSupplementaryTagView(nib: UINib(nibName: "SupplementaryTagViewEx", bundle: nil))
             tagsView.dataSource = self
@@ -35,7 +35,6 @@ class TableViewCell: UITableViewCell {
     }
     
     func checkSupplementaryIndex() {
-        print(tagsView.indexForSupplementaryView)
     }
 }
 
@@ -45,7 +44,7 @@ extension TableViewCell: TagsViewDataSource {
     }
     
     func numberOfTags(in tagsView: TagsView) -> Int {
-        return viewModel?.strings.count ?? 0
+        return viewModel?.tagDatas.count ?? 0
     }
     
     func alignment(in tagsView: TagsView) -> Alignment {
@@ -71,16 +70,20 @@ extension TableViewCell: TagsViewDataSource {
     }
    
     func tagsView(_ tagsView: TagsView, viewForIndexAt index: Int) -> TagView? {
-        if let reuseIdentifier = viewModel?.reuseIdentifier {
-            let tagView = tagsView.dequeueReusableTagView(for: index, withReuseIdentifier: reuseIdentifier) as? TagViewEx2
-            tagView?.string = viewModel!.strings[index]
-            tagView?.label.text = viewModel!.strings[index]
-            return tagView ?? TagViewEx2()
+        if let reuseIdentifier = viewModel?.tagDatas[index].reuseIdentifier {
+            if reuseIdentifier == "TagViewEx" {
+                let tagView = tagsView.dequeueReusableTagView(for: index, withReuseIdentifier: reuseIdentifier) as? TagViewEx
+                tagView?.string = viewModel!.tagDatas[index].string
+                tagView?.label.text = viewModel!.tagDatas[index].string
+                return tagView
+            } else {
+                let tagView = tagsView.dequeueReusableTagView(for: index, withReuseIdentifier: reuseIdentifier) as? TagViewEx2
+                tagView?.string = viewModel!.tagDatas[index].string
+                tagView?.label.text = viewModel!.tagDatas[index].string
+                return tagView
+            }
         } else {
-            let tagView = tagsView.dequeueReusableTagView(for: index) as? TagViewEx
-            tagView?.string = viewModel!.strings[index]
-            tagView?.label.text = viewModel!.strings[index]
-            return tagView ?? TagViewEx()
+            return nil
         }
     }
     

@@ -35,14 +35,16 @@ extension TagsView {
             tagView.isHidden = true
         }
         
-        zip(tagViews, layout.columns).forEach { (tagView, column) in
+        let markedTagViews = tagViews.filter({ $0.tag >= 0 }).sorted(by: { $0.tag < $1.tag })
+        layout.columns.enumerated().forEach { (index, column) in
+            let tagView = markedTagViews[index]
             tagView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: column.minX).isActive = true
             tagView.topAnchor.constraint(equalTo: self.topAnchor, constant: column.minY).isActive = true
             tagView.widthAnchor.constraint(equalToConstant: column.width).isActive = true
             tagView.heightAnchor.constraint(equalToConstant: column.height).isActive = true
             tagView.isHidden = false
         }
-
+        
         if let supplementaryTagView = supplementaryTagView {
             supplementaryTagView.constraints.filter { (constraint) -> Bool in
                 if let firstItem = constraint.firstItem as? UIView, firstItem == supplementaryTagView, constraint.secondItem == nil {

@@ -8,6 +8,8 @@
 
 import UIKit
 
+let unassignedTag = -1
+
 open class TagsView: UIView {
     public weak var dataSource: TagsViewDataSource?
     public weak var delegate: TagsViewDelegate?
@@ -79,6 +81,10 @@ open class TagsView: UIView {
         layoutIdentifier = identifier
         layoutPartition = partition
         
+        tagViews.forEach { (tagView) in
+            tagView.tag = unassignedTag
+        }
+        
         (0..<numberOfTags).forEach { (index) in
             _ = self.dataSource?.tagsView(self, viewForIndexAt: index)
         }
@@ -139,7 +145,8 @@ extension TagsView {
         let tagView = tagViewNibs[reuseIdentifier]?.instantiate(withOwner: nil, options: nil).first as? TagView ?? TagView()
         tagView.translatesAutoresizingMaskIntoConstraints = false
         tagView.reuseIdentifier = reuseIdentifier
-        insertSubview(tagView, at: index)
+        tagView.tag = index
+        addSubview(tagView)
         
         return tagView
     }
@@ -170,12 +177,16 @@ extension TagsView {
     }
     
     func tagView(at index: Int, withReuseIdentifier reuseIdentifier: String) -> TagView? {
-        let filteredTagViews = tagViews.filter { $0.reuseIdentifier == reuseIdentifier }
-        if index < filteredTagViews.count {
-            return filteredTagViews[index]
-        } else {
-            return nil
+        if let tagView = tagViews.first(where: { $0.tag == index }), tagView.reuseIdentifier == reuseIdentifier {
+            return tagView
         }
+        
+        if let tagView = tagViews.first(where: { $0.reuseIdentifier == reuseIdentifier && $0.tag == unassignedTag }) {
+            tagView.tag = index
+            return tagView
+        }
+        
+        return nil
     }
 }
 
@@ -223,7 +234,6 @@ extension TagsView {
 extension TagsView {
     open func dequeueReusableTagView(for index: Int, withReuseIdentifier reuseIdentifier: String = "default") -> TagView {
         if let tagView = tagView(at: index, withReuseIdentifier: reuseIdentifier) {
-            insertSubview(tagView, at: index)
             return tagView
         }
         
