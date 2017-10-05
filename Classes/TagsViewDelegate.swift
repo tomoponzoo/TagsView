@@ -12,3 +12,8 @@ public protocol TagsViewDelegate: class {
     func tagsView(_ tagsView: TagsView, didSelectItemAt index: Int)
     func didSelectSupplementaryItem(_ tagsView: TagsView)
 }
+
+extension TagsViewDelegate {
+    func tagsView(_ tagsView: TagsView, didSelectItemAt index: Int) {}
+    func didSelectSupplementaryItem(_ tagsView: TagsView) {}
+}

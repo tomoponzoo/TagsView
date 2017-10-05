@@ -75,11 +75,11 @@ class RowsLayout {
     
     func layout() {
         let tagViews = (0..<tagsView.layoutProperties.numberOfTags).flatMap { (index) -> TagView? in
-            return tagsView.dataSource?.tagsView(self.tagsView, viewForIndexAt: index)
+            return tagsView.tagViews[index]
         }
         let tagViewSizes = tagViews.map { $0.intrinsicContentSize }
         
-        let supplementaryTagView = tagsView.dataSource?.supplementaryTagView(in: tagsView)
+        let supplementaryTagView = tagsView.supplementaryTagView
         let supplementaryTagViewSize = supplementaryTagView?.intrinsicContentSize
         
         let h = tagViewSizes.reduce(supplementaryTagViewSize?.height ?? 0) { max($0, $1.height) }
