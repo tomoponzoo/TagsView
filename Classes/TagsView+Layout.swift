@@ -11,8 +11,7 @@ import UIKit
 extension TagsView {
     
     open override func updateConstraints() {
-        let engine = LayoutEngine(tagsView: self, preferredMaxLayoutWidth: preferredMaxLayoutWidth)
-        let layout = engine.layout(identifier: layoutIdentifier, partition: layoutPartition)
+        guard let layout = layout else { return }
         
         removeConstraints(constraints)
         
@@ -70,9 +69,7 @@ extension TagsView {
     }
     
     open override var intrinsicContentSize: CGSize {
-        let engine = LayoutEngine(tagsView: self, preferredMaxLayoutWidth: preferredMaxLayoutWidth)
-        let layout = engine.layout(identifier: layoutIdentifier, partition: layoutPartition)
-        return layout.size
+        return layout?.size ?? .zero
     }
     
     func resetLayoutProperties() -> LayoutProperties {
