@@ -17,27 +17,11 @@ class LayoutEngine {
         self.preferredMaxLayoutWidth = preferredMaxLayoutWidth
     }
     
-    func layout(identifier: String? = nil, partition: String? = "defaults") -> Layout {
-        if
-            let identifier = identifier,
-            let partition = partition,
-            let layout = LayoutCache.shared.getLayout(identifier: makeIdentifier(identifier, partition: partition)) {
-            return layout
-        }
-        
+    func layout() -> Layout {
         let rowsLayout = RowsLayout(tagsView: tagsView, preferredMaxLayoutWidth: preferredMaxLayoutWidth)
         rowsLayout.layout()
         
-        let layout = Layout(layout: rowsLayout)
-        if let identifier = identifier, let partition = partition, preferredMaxLayoutWidth > 0 {
-            LayoutCache.shared.setLayout(layout, identifier: makeIdentifier(identifier, partition: partition))
-        }
-        
-        return layout
-    }
-    
-    func makeIdentifier(_ identifier: String, partition: String) -> String {
-        return "\(partition)#\(identifier)"
+        return Layout(layout: rowsLayout)
     }
 }
 

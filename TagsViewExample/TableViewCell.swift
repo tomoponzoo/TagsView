@@ -31,7 +31,7 @@ class TableViewCell: UITableViewCell {
     
     func updateCell(viewModel: ViewModel) {
         self.viewModel = viewModel
-        tagsView.reloadData(identifier: viewModel.identifier)
+        tagsView.reloadData()
     }
     
     func checkSupplementaryIndex() {

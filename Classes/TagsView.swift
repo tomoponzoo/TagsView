@@ -39,8 +39,7 @@ open class TagsView: UIView {
     }
     
     var layoutProperties = LayoutProperties()
-    var layoutIdentifier: String?
-    var layoutPartition: String?
+    var layout: Layout?
     
     var tagViewNibs = [String: UINib]()
     var supplementaryTagViewNib: UINib?
@@ -73,13 +72,7 @@ open class TagsView: UIView {
     }
     
     public func reloadData() {
-        reloadData(identifier: nil, partition: nil)
-    }
-    
-    public func reloadData(identifier: String? = nil, partition: String? = nil) {
         layoutProperties = resetLayoutProperties()
-        layoutIdentifier = identifier
-        layoutPartition = partition
         
         tagViews.forEach { (tagView) in
             tagView.tag = unassignedTag
@@ -91,6 +84,8 @@ open class TagsView: UIView {
         
         _ = dataSource?.supplementaryTagView(in: self)
         
+        layout = LayoutEngine(tagsView: self, preferredMaxLayoutWidth: preferredMaxLayoutWidth).layout()
+
         invalidateIntrinsicContentSize()
     }
     
@@ -113,10 +108,7 @@ open class TagsView: UIView {
     }
     
     public var indexForSupplementaryView: Int? {
-        let engine = LayoutEngine(tagsView: self, preferredMaxLayoutWidth: preferredMaxLayoutWidth)
-        let layout = engine.layout(identifier: layoutIdentifier, partition: layoutPartition)
-        
-        guard let supplementaryColumn = layout.supplementaryColumn else {
+        guard let layout = layout, let supplementaryColumn = layout.supplementaryColumn else {
             return nil
         }
         
