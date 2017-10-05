@@ -146,7 +146,7 @@ extension TagsView {
         tagView.translatesAutoresizingMaskIntoConstraints = false
         tagView.reuseIdentifier = reuseIdentifier
         tagView.tag = index
-        addSubview(tagView)
+        insertSubview(tagView, at: index)
         
         return tagView
     }
@@ -234,6 +234,7 @@ extension TagsView {
 extension TagsView {
     open func dequeueReusableTagView(for index: Int, withReuseIdentifier reuseIdentifier: String = "default") -> TagView {
         if let tagView = tagView(at: index, withReuseIdentifier: reuseIdentifier) {
+            insertSubview(tagView, at: index)
             return tagView
         }
         
